@@ -35,7 +35,7 @@ Client-server chat applications are software systems that enable real-time commu
 •	For security and privacy, chat applications often implement user authentication mechanisms.
 •	Users are required to provide credentials (e.g., username and password) to access the chat system.
 •	More advanced methods like tokens or secure protocols can enhance authentication.
-5. Message Routing:
+## 5. Message Routing:
 •	The server is responsible for routing messages from one client to another.
 •	It ensures that messages are delivered to the intended recipients.
 •	Message routing may involve maintaining a list of connected users and their associated sockets.
@@ -73,66 +73,66 @@ Client-server chat applications are versatile tools that facilitate real-time co
 
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
 
-## Program:
+## PROGRAM:
 ### client:
-```
+```python
+
 import socket
 
-def client_program():
-    host = socket.gethostname()  # As both code is running on the same PC
-    port = 5000  # Socket server port number
-    client_socket = socket.socket()  # Instantiate
-    client_socket.connect((host, port))  # Connect to the server
-    message = input(" -> ")  # Take input
-    while message.lower().strip() != 'bye':
-        client_socket.send(message.encode())  # Send message
-        data = client_socket.recv(1024).decode()  # Receive response
-        print('Received from server: ' + data)  # Show in terminal
-        message = input(" -> ")  # Again take input
-    client_socket.close()  # Close the connection
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-if __name__ == '__main__':
-    client_program()
+client.connect(("localhost", 9999))
+
+done=False
+
+while not done:
+    client.send(input("Message ").encode('utf-8'))
+    msg = client.recv(1024).decode('utf-8')
+
+    if msg == 'quit':
+        done=True
+    else:
+        print(msg)
+
+
+
+client.close()
 
 ```
-### server:
-```
+### server
+```python
 import socket
+from base64 import decode
+from operator import truediv
 
-def server_program():
-    # Get the hostname
-    host = socket.gethostname()
-    port = 5000  # Initiate port no above 1024
-    server_socket = socket.socket()  # Get instance
-    # Look closely. The bind() function takes a tuple as an argument
-    server_socket.bind((host, port))  # Bind host address and port together
-    # Configure how many clients the server can listen to simultaneously
-    server_socket.listen(2)
-    conn, address = server_socket.accept()  # Accept new connection
-    print("Connection from: " + str(address))
-    while True:
-        # Receive data stream. It won't accept data packets greater than 1024 bytes
-        data = conn.recv(1024).decode()
-        if not data:
-            # If data is not received, break
-            break
-        print("From connected user: " + str(data))
-        data = input(' -> ')
-        conn.send(data.encode())  # Send data to the client
-    conn.close()  # Close the connection
+server =socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('localhost', 9999))
+server.listen()
+client,addr=server.accept()
 
-if __name__ == '__main__':
-    server_program()
+done = False
 
+while not done:
+    msg = client.recv(1024).decode('utf-8')
+
+    if msg == 'quit':
+        done = True
+    else:
+        print(msg)
+
+    client.send(input("Message ").encode('utf-8'))
+
+
+client.close()
+server.close()
 ```
 
-## Output:
-### client:
-![329243521-cd79d220-6ceb-4598-bb86-3b21a7d0a3c7](https://github.com/Priya-Loganathan/ChatStudy/assets/121166075/de8097e1-1e3a-4b6c-ae6e-fab3ac1e2187)
+## OUTPUT:
+![image](https://github.com/user-attachments/assets/3387a89a-890f-4322-900f-9aed4ceee866)
 
-### server:
-![329243521-cd79d220-6ceb-4598-bb86-3b21a7d0a3c7-1](https://github.com/Priya-Loganathan/ChatStudy/assets/121166075/1436feb4-47a9-4ff5-978d-11f9aa9b5c51)
+
 
 ## Result:
-Thus the study on Client Server Chat Applications has been performed.
+
+Thus the study on Client Server Chat Applications has been performed
 
